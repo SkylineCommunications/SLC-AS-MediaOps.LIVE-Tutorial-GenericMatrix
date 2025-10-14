@@ -7,7 +7,7 @@ namespace GenericMatrixConnectionHandler
 	using Skyline.DataMiner.Automation;
 	using Skyline.DataMiner.MediaOps.Live.API.Enums;
 	using Skyline.DataMiner.MediaOps.Live.Automation.Mediation.ConnectionHandlers;
-	using Skyline.DataMiner.MediaOps.Live.Mediation.Data;
+	using Skyline.DataMiner.MediaOps.Live.Mediation.ConnectionHandlers.Data;
 
 	public class Script : ConnectionHandlerScript
 	{
@@ -86,12 +86,13 @@ namespace GenericMatrixConnectionHandler
 
 		public override void Connect(IEngine engine, IConnectionHandlerEngine connectionEngine, CreateConnectionsRequest createConnectionsRequest)
 		{
-			var groupedByDestinationElement = createConnectionsRequest.Connections.GroupBy(x => x.DestinationEndpoint.Element);
+			var groupedByDestinationElement = createConnectionsRequest.Connections
+				.GroupBy(x => x.DestinationEndpoint.Element.Value);
 
 			foreach (var group in groupedByDestinationElement)
 			{
 				var elementId = group.Key;
-				var element = engine.FindElementByKey(elementId);
+				var element = engine.FindElement(elementId.AgentId, elementId.ElementId);
 
 				foreach (var connection in group)
 				{
@@ -105,12 +106,12 @@ namespace GenericMatrixConnectionHandler
 
 		public override void Disconnect(IEngine engine, IConnectionHandlerEngine connectionEngine, DisconnectDestinationsRequest disconnectDestinationsRequest)
 		{
-			var groupedByDestinationElement = disconnectDestinationsRequest.Destinations.GroupBy(x => x.Element);
+			var groupedByDestinationElement = disconnectDestinationsRequest.Destinations.GroupBy(x => x.Element.Value);
 
 			foreach (var group in groupedByDestinationElement)
 			{
 				var elementId = group.Key;
-				var element = engine.FindElementByKey(elementId);
+				var element = engine.FindElement(elementId.AgentId, elementId.ElementId);
 
 				foreach (var destination in group)
 				{
