@@ -45,7 +45,7 @@ namespace GenericMatrixConnectionHandler
 
 					var output = connectionEngine.Api.Endpoints.GetByRoleElementAndIdentifier(Role.Destination, elementId, outputIdentifier)
 						?? throw new InvalidOperationException($"Destination endpoint '{outputIdentifier}' not found for element '{elementId}'.");
-					
+
 					if (String.IsNullOrWhiteSpace(inputIdentifier))
 					{
 						updatedConnections.Add(new ConnectionUpdate(output, isConnected: false));
@@ -73,7 +73,7 @@ namespace GenericMatrixConnectionHandler
 
 					var output = connectionEngine.Api.Endpoints.GetByRoleElementAndIdentifier(Role.Destination, elementId, outputIdentifier)
 						?? throw new InvalidOperationException($"Destination endpoint '{outputIdentifier}' not found for element '{elementId}'.");
-					
+
 					updatedConnections.Add(new ConnectionUpdate(output, isConnected: false));
 				}
 			}
@@ -86,12 +86,11 @@ namespace GenericMatrixConnectionHandler
 
 		public override void Connect(IEngine engine, IConnectionHandlerEngine connectionEngine, CreateConnectionsRequest createConnectionsRequest)
 		{
-			var groupedByDestinationElement = createConnectionsRequest.Connections
-				.GroupBy(x => x.DestinationEndpoint.Element.Value);
+			var groupedByDestinationElement = createConnectionsRequest.Connections.GroupBy(x => x.DestinationEndpoint.Element);
 
 			foreach (var group in groupedByDestinationElement)
 			{
-				var elementId = group.Key;
+				var elementId = group.Key.Value;
 				var element = engine.FindElement(elementId.AgentId, elementId.ElementId);
 
 				foreach (var connection in group)
@@ -106,11 +105,11 @@ namespace GenericMatrixConnectionHandler
 
 		public override void Disconnect(IEngine engine, IConnectionHandlerEngine connectionEngine, DisconnectDestinationsRequest disconnectDestinationsRequest)
 		{
-			var groupedByDestinationElement = disconnectDestinationsRequest.Destinations.GroupBy(x => x.Element.Value);
+			var groupedByDestinationElement = disconnectDestinationsRequest.Destinations.GroupBy(x => x.Element);
 
 			foreach (var group in groupedByDestinationElement)
 			{
-				var elementId = group.Key;
+				var elementId = group.Key.Value;
 				var element = engine.FindElement(elementId.AgentId, elementId.ElementId);
 
 				foreach (var destination in group)
