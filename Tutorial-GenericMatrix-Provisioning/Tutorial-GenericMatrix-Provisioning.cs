@@ -8,7 +8,6 @@ using Skyline.DataMiner.MediaOps.Live.API;
 using Skyline.DataMiner.MediaOps.Live.API.Enums;
 using Skyline.DataMiner.MediaOps.Live.API.Objects.ConnectivityManagement;
 using Skyline.DataMiner.MediaOps.Live.Automation;
-using Skyline.DataMiner.MediaOps.Live.Extensions;
 
 namespace TutorialGenericMatrixProvisioning
 {
@@ -73,7 +72,7 @@ namespace TutorialGenericMatrixProvisioning
 
 			// Get existing endpoints and virtual signal groups for the element.
 			var existingEndpoints = api.Endpoints.Query()
-				.Where(x => x.Role == Role.Source && x.Element == elementId)
+				.Where(x => x.Role == EndpointRole.Source && x.Element == elementId)
 				.SafeToDictionary(x => (x.Element, x.Identifier));
 
 			var existingVirtualSignalGroups = api.VirtualSignalGroups
@@ -97,7 +96,7 @@ namespace TutorialGenericMatrixProvisioning
 				}
 
 				endpoint.Name = name;
-				endpoint.Role = Role.Source;
+				endpoint.Role = EndpointRole.Source;
 				endpoint.Element = elementId;
 				endpoint.Identifier = key;
 				endpoint.TransportType = sdiTransportType;
@@ -111,7 +110,7 @@ namespace TutorialGenericMatrixProvisioning
 				}
 
 				vsg.Name = name;
-				vsg.Role = Role.Source;
+				vsg.Role = EndpointRole.Source;
 				vsg.AssignEndpointToLevel(videoLevel, endpoint);
 
 				newVirtualSignalGroups.Add(vsg);
@@ -130,7 +129,7 @@ namespace TutorialGenericMatrixProvisioning
 			var sdiTransportType = api.TransportTypes.Read("SDI");
 
 			var existingEndpoints = api.Endpoints.Query()
-				.Where(x => x.Role == Role.Destination && x.Element == elementId)
+				.Where(x => x.Role == EndpointRole.Destination && x.Element == elementId)
 				.SafeToDictionary(x => (x.Element, x.Identifier));
 
 			var existingVirtualSignalGroups = api.VirtualSignalGroups
@@ -153,7 +152,7 @@ namespace TutorialGenericMatrixProvisioning
 				}
 
 				endpoint.Name = name;
-				endpoint.Role = Role.Destination;
+				endpoint.Role = EndpointRole.Destination;
 				endpoint.Element = elementId;
 				endpoint.Identifier = key;
 				endpoint.TransportType = sdiTransportType;
@@ -167,7 +166,7 @@ namespace TutorialGenericMatrixProvisioning
 				}
 
 				vsg.Name = name;
-				vsg.Role = Role.Destination;
+				vsg.Role = EndpointRole.Destination;
 				vsg.AssignEndpointToLevel(videoLevel, endpoint);
 
 				newVirtualSignalGroups.Add(vsg);
