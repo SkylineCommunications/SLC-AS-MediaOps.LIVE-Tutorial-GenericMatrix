@@ -4,10 +4,10 @@ using System.Linq;
 
 using Skyline.DataMiner.Automation;
 using Skyline.DataMiner.Core.DataMinerSystem.Common;
-using Skyline.DataMiner.MediaOps.Live.API;
-using Skyline.DataMiner.MediaOps.Live.API.Enums;
-using Skyline.DataMiner.MediaOps.Live.API.Objects.ConnectivityManagement;
-using Skyline.DataMiner.MediaOps.Live.Automation;
+using Skyline.DataMiner.Solutions.MediaOps.Live.API.Enums;
+using Skyline.DataMiner.Solutions.MediaOps.Live.API.Objects.ConnectivityManagement;
+using Skyline.DataMiner.Solutions.MediaOps.Live.Automation;
+using Skyline.DataMiner.Solutions.MediaOps.Live.Automation.API;
 
 namespace TutorialGenericMatrixProvisioning
 {
@@ -62,13 +62,13 @@ namespace TutorialGenericMatrixProvisioning
 			ProvisionDestinations(engine, element, api);
 		}
 
-		private void ProvisionSources(IEngine engine, Element element, MediaOpsLiveApi api)
+		private void ProvisionSources(IEngine engine, Element element, IEngineMediaOpsLiveApi api)
 		{
 			var elementId = new DmsElementId(element.DmaId, element.ElementId);
 
 			// Get the video level and SDI transport type. They will assigned to the endpoints and virtual signal groups.
-			var videoLevel = api.Levels.Read("Video");
-			var sdiTransportType = api.TransportTypes.Read("SDI");
+			var videoLevel = api.Levels.ReadSingle("Video");
+			var sdiTransportType = api.TransportTypes.ReadSingle("SDI");
 
 			// Get existing endpoints and virtual signal groups for the element.
 			var existingEndpoints = api.Endpoints.Query()
@@ -121,12 +121,12 @@ namespace TutorialGenericMatrixProvisioning
 			api.VirtualSignalGroups.CreateOrUpdate(newVirtualSignalGroups);
 		}
 
-		private void ProvisionDestinations(IEngine engine, Element element, MediaOpsLiveApi api)
+		private void ProvisionDestinations(IEngine engine, Element element, IEngineMediaOpsLiveApi api)
 		{
 			var elementId = new DmsElementId(element.DmaId, element.ElementId);
 
-			var videoLevel = api.Levels.Read("Video");
-			var sdiTransportType = api.TransportTypes.Read("SDI");
+			var videoLevel = api.Levels.ReadSingle("Video");
+			var sdiTransportType = api.TransportTypes.ReadSingle("SDI");
 
 			var existingEndpoints = api.Endpoints.Query()
 				.Where(x => x.Role == EndpointRole.Destination && x.Element == elementId)
