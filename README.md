@@ -1,5 +1,5 @@
 # SLC-AS-MediaOps.LIVE-Tutorial-GenericMatrix
-Complete tutorial implementation for the integration of the Generic Matrix connector in MediaOps.LIVE.
+Complete tutorial implementation for the integration of the Generic Matrix connector in MediaOps.LIVE: https://docs.dataminer.services/solutions/standard_solutions/MediaOps%20Live/Tutorials/Generic%20Matrix/Generic%20Matrix_ConnectionHandlerScript.html.
 
 ## About DataMiner
 
