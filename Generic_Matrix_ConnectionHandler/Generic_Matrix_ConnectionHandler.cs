@@ -43,8 +43,11 @@ namespace GenericMatrixConnectionHandler
 					var outputIdentifier = Convert.ToString(row[0]);
 					var inputIdentifier = Convert.ToString(row[5]);
 
-					var output = connectionEngine.Api.Endpoints.GetByRoleElementAndIdentifier(EndpointRole.Destination, elementId, outputIdentifier)
-						?? throw new InvalidOperationException($"Destination endpoint '{outputIdentifier}' not found for element '{elementId}'.");
+					var output = connectionEngine.Api.Endpoints.GetByRoleElementAndIdentifier(EndpointRole.Destination, elementId, outputIdentifier);
+					if (output == null)
+					{
+						continue;
+					}
 
 					if (String.IsNullOrWhiteSpace(inputIdentifier))
 					{
@@ -71,8 +74,11 @@ namespace GenericMatrixConnectionHandler
 				{
 					var outputIdentifier = Convert.ToString(row[0]);
 
-					var output = connectionEngine.Api.Endpoints.GetByRoleElementAndIdentifier(EndpointRole.Destination, elementId, outputIdentifier)
-						?? throw new InvalidOperationException($"Destination endpoint '{outputIdentifier}' not found for element '{elementId}'.");
+					var output = connectionEngine.Api.Endpoints.GetByRoleElementAndIdentifier(EndpointRole.Destination, elementId, outputIdentifier);
+					if (output == null)
+					{
+						continue;
+					}
 
 					updatedConnections.Add(new ConnectionUpdate(output, isConnected: false));
 				}
